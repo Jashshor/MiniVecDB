@@ -1,0 +1,5 @@
+cc_library(
+    name = "utils",
+    hdrs = ["timer.h", "logging.h"],
+    visibility = ["//visibility:public"],
+)

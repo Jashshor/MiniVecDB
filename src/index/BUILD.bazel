@@ -1,0 +1,5 @@
+cc_library(
+    name = "iindex",
+    hdrs = ["iindex.h"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,9 @@
+cc_test(
+    name = "test_distance",
+    srcs = ["test_distance.cpp"],
+    deps = [
+        "//src/metric:distance",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)

@@ -1,0 +1,35 @@
+# 腾讯内部/开源项目常用的 C++ 格式化标准
+# 基于 Google 风格微调，适配现代宽屏和 C++17
+Language: Cpp
+BasedOnStyle: Google
+
+# 核心差异：Google 默认是 80，腾讯通常放宽到 100，避免代码频繁换行导致可读性下降
+ColumnLimit: 100
+
+# 缩进宽度：新团队和底层基建目前统一采用 2 个空格（不使用 Tab）
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# public/private 等访问修饰符的偏移（-1 代表向左退 1 格，与类名形成层级）
+AccessModifierOffset: -1
+
+# 头文件排序：在每个 include 块内部分别排序，保留我们手动添加的空行分类
+SortIncludes: true
+IncludeBlocks: Preserve
+
+# 指针和引用的对齐方式（靠左对齐，即 const float* vec，而不是 const float * vec）
+PointerAlignment: Left
+
+# 是否允许短语句放在同一行
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline # 仅允许类内内联的空函数或极简函数在一行
+AllowShortIfStatementsOnASingleLine: false
+
+# 构造函数初始化列表的缩进格式
+ConstructorInitializerIndentWidth: 4
+AlignConsecutiveAssignments: false
+AlignOperands: Align
+
+# namespace 内部的代码不缩进，避免层级太深
+NamespaceIndentation: None

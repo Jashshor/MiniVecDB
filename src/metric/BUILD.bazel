@@ -1,0 +1,6 @@
+cc_library(
+    name = "distance",
+    srcs = ["distance.cpp"],
+    hdrs = ["distance.h"],
+    visibility = ["//visibility:public"], # 允许其他包引用
+)

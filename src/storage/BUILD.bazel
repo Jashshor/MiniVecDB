@@ -1,0 +1,7 @@
+cc_library(
+    name = "vector_store",
+    hdrs = ["vector_store.h"],
+    # 明天写完 cpp 后，把 "vector_store.cpp" 加到 srcs 里
+    srcs = [], 
+    visibility = ["//visibility:public"],
+)

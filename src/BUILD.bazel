@@ -1,0 +1,6 @@
+cc_binary(
+    name = "vecdb_cli",
+    srcs = ["main.cpp"],
+    # 这里声明依赖 metric 模块
+    deps = ["//src/metric:distance"], 
+)

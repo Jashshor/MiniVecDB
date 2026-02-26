@@ -1,0 +1,18 @@
+{
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  // 指定 C++ 文件使用官方的 cpptools 进行格式化
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.formatOnSave": true
+    },
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.formatOnSave": true
+    },
+    
+    // 告诉 C/C++ 插件去读取我们刚才建的 .clang-format 文件
+    "C_Cpp.formatting": "Default",
+    "C_Cpp.clang_format_fallbackStyle": "none",
+    "C_Cpp.clang_format_style": "file"
+}

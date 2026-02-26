@@ -1,0 +1,6 @@
+build --cxxopt=-std=c++17
+build --cxxopt=-Wall
+build --cxxopt=-Wextra
+build --cxxopt=-Wpedantic
+# 让 Bazel 输出更美观的测试结果
+test --test_output=errors
