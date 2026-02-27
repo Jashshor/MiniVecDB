@@ -1,0 +1,5 @@
+cc_binary(
+    name = "gen_dataset",
+    srcs = ["gen_dataset.cpp"],
+    visibility = ["//visibility:public"],
+)
