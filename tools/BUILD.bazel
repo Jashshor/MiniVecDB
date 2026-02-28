@@ -3,3 +3,12 @@ cc_binary(
     srcs = ["gen_dataset.cpp"],
     visibility = ["//visibility:public"],
 )
+cc_binary(
+    name = "run_benchmark",
+    srcs = ["run_benchmark.cpp"],
+    deps = [
+        "//src/storage:vector_store",
+        "//src/index:iindex",
+        "//src/utils:utils",
+    ],
+)

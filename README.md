@@ -90,3 +90,5 @@ MiniVecDB/
 ├── tests/                # 基于 GTest 的单元测试集
 └── docs/                 # 架构设计文档与 Benchmark 报告
 ```
+FlatIndex测试结果：
+![alt text](image.png)
