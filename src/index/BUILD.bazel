@@ -1,6 +1,10 @@
 cc_library(
     name = "iindex",
-    hdrs = ["iindex.h"],
-    deps = ["//src/storage:vector_store"],
+    hdrs = ["iindex.h", "flat_index.h"],
+    srcs = ["flat_index.cpp"],
+    deps = [
+        "//src/storage:vector_store",
+        "//src/metric:distance",
+    ],
     visibility = ["//visibility:public"],
 )
