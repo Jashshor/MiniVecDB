@@ -4,3 +4,13 @@ cc_library(
     srcs = ["vector_store.cpp"],
     visibility = ["//visibility:public"],
 )
+
+cc_library(
+    name = "serializer",
+    hdrs = ["serializer.h"],
+    srcs = ["serializer.cpp"],
+    deps = [
+        "//src/storage:vector_store",
+    ],
+    visibility = ["//visibility:public"],
+)

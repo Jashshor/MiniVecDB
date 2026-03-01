@@ -3,6 +3,7 @@ cc_binary(
     srcs = ["main.cpp"],
     deps = [
         "//src/metric:distance",
+        "//src/storage:serializer",
         "//src/storage:vector_store",
         "//src/utils:utils",
         "//src/index:iindex",

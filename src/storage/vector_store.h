@@ -33,6 +33,8 @@ class VectorStore {
   size_t size() const { return ids_.size(); }
   // 向量维度。
   size_t dim() const { return dim_; }
+  const uint64_t* get_ids_ptr() const { return ids_.data(); }
+  const float* get_data_ptr() const { return data_.data(); }
 
  private:
   // 每条向量维度。

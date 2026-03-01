@@ -1,12 +1,16 @@
 cc_binary(
     name = "gen_dataset",
     srcs = ["gen_dataset.cpp"],
+    deps = [
+        "//src/storage:serializer",
+    ],
     visibility = ["//visibility:public"],
 )
 cc_binary(
     name = "run_benchmark",
     srcs = ["run_benchmark.cpp"],
     deps = [
+        "//src/storage:serializer",
         "//src/storage:vector_store",
         "//src/index:iindex",
         "//src/utils:utils",

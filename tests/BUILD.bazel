@@ -26,3 +26,14 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "test_serializer",
+    srcs = ["test_serializer.cpp"],
+    deps = [
+        "//src/storage:serializer",
+        "//src/storage:vector_store",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
