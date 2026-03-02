@@ -13,8 +13,8 @@ struct FileHeader {
   uint32_t version;
   uint32_t dim;
   uint32_t reserved1;
-  uint32_t count;
-  uint32_t reserved2;
+  uint64_t count;
+  uint64_t reserved2;
 };
 #pragma pack(pop)
 constexpr uint32_t CURRENT_VERSION = 1;

@@ -1,10 +1,18 @@
 #include "src/storage/serializer.h"
+#include <cstdint>
 #include <fstream>
 #include <stdexcept>
 
 namespace minivecdb {
 namespace storage {
+inline bool is_little_endian() {
+  uint32_t num = 1;
+  return (*reinterpret_cast<uint8_t*>(&num) == 1);
+}
 void Serializer::save(const std::string& path, const VectorStore& store) {
+  if (!is_little_endian()) {
+    throw std::runtime_error("Only little-endian architechtures are supported currently.");
+  }
   std::ofstream out(path, std::ios::binary);
   if (!out.is_open()) {
     throw std::runtime_error("Failed to open file for writing: " + path);
@@ -17,7 +25,22 @@ void Serializer::save(const std::string& path, const VectorStore& store) {
   header.reserved1 = 0;
   header.reserved2 = 0;
 
-  out.write(reinterpret_cast<const char*>(&header), sizeof(FileHeader));
+  // 逐个字节写入（而不用header），避免大小端序影响
+  out.write(MAGIC_WORD, 4);
+  uint32_t version = CURRENT_VERSION;
+  out.write(reinterpret_cast<const char*>(&version), sizeof(version));
+
+  uint32_t dim = store.dim();
+  out.write(reinterpret_cast<const char*>(&dim), sizeof(dim));
+
+  uint32_t reserved1 = 0;
+  out.write(reinterpret_cast<const char*>(&reserved1), sizeof(reserved1));
+
+  uint64_t count = store.size();
+  out.write(reinterpret_cast<const char*>(&count), sizeof(count));
+
+  uint64_t reserved2 = 0;
+  out.write(reinterpret_cast<const char*>(&reserved2), sizeof(reserved2));
   size_t total_floats = static_cast<size_t>(header.count) * static_cast<size_t>(header.dim);
   out.write(reinterpret_cast<const char*>(store.get_ids_ptr()), header.count * sizeof(uint64_t));
   out.write(reinterpret_cast<const char*>(store.get_data_ptr()), total_floats * sizeof(float));
@@ -28,20 +51,42 @@ void Serializer::save(const std::string& path, const VectorStore& store) {
 }
 
 VectorStore Serializer::load(const std::string& path) {
+  if (!is_little_endian()) {
+    throw std::runtime_error("Only little-endian architectures are supported currently.");
+  }
+
+  static_assert(sizeof(float) == 4, "Float must be 32-bit IEEE 754");
+
   std::ifstream in(path, std::ios::binary);
   if (!in.is_open()) {
     throw std::runtime_error("Failed to open file for reading: " + path);
   }
 
   FileHeader header;
-  if (!in.read(reinterpret_cast<char*>(&header), sizeof(FileHeader))) {
-    throw std::runtime_error("File is too small or truncated: " + path);
-  }
+  // if (!in.read(reinterpret_cast<char*>(&header), sizeof(FileHeader))) {
+  //   throw std::runtime_error("File is too small or truncated: " + path);
+  // }
+  in.read(header.magic, 4);
   if (std::memcmp(header.magic, MAGIC_WORD, 4) != 0) {
     throw std::runtime_error("Invalid magic word. Not an MVDB file.");
   }
+  in.read(reinterpret_cast<char*>(&header.version), sizeof(header.version));
   if (header.version != CURRENT_VERSION) {
     throw std::runtime_error("Unsupported MVDB version: " + std::to_string(header.version));
+  }
+  in.read(reinterpret_cast<char*>(&header.dim), sizeof(header.dim));
+  in.read(reinterpret_cast<char*>(&header.reserved1), sizeof(header.reserved1));
+  in.read(reinterpret_cast<char*>(&header.count), sizeof(header.count));
+  in.read(reinterpret_cast<char*>(&header.reserved2), sizeof(header.reserved2));
+  // 验证文件实际大小是否满足预期
+  auto current_pos = in.tellg();
+  in.seekg(0, std::ios::end);
+  auto file_size = in.tellg();
+  in.seekg(current_pos, std::ios::beg);
+  size_t expected_payload_size =
+      (header.count * sizeof(uint64_t)) + (header.count * header.dim * sizeof(float));
+  if (file_size - current_pos < expected_payload_size) {
+    throw std::runtime_error("File truncated: payload size smaller than header declaration.");
   }
 
   VectorStore store(header.dim);
