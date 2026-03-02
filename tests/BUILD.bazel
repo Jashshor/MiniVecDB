@@ -37,3 +37,13 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+cc_test(
+    name = "test_graph_index",
+    srcs = ["test_graph_index.cpp"],
+    deps = [
+        "//src/storage:vector_store",
+        "//src/index:iindex",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
