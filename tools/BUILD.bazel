@@ -7,8 +7,18 @@ cc_binary(
     visibility = ["//visibility:public"],
 )
 cc_binary(
-    name = "run_benchmark",
-    srcs = ["run_benchmark.cpp"],
+    name = "run_benchmark_flat",
+    srcs = ["run_benchmark_flat.cpp"],
+    deps = [
+        "//src/storage:serializer",
+        "//src/storage:vector_store",
+        "//src/index:iindex",
+        "//src/utils:utils",
+    ],
+)
+cc_binary(
+    name = "run_benchmark_graph",
+    srcs = ["run_benchmark_graph.cpp"],
     deps = [
         "//src/storage:serializer",
         "//src/storage:vector_store",
