@@ -8,20 +8,27 @@
 using namespace minivecdb;
 
 int main(int argc, char** argv) {
+  // CLI 用法：加载一个序列化数据文件，并执行一次 topK 查询演示。
   if (argc != 3) {
     std::cerr << "Usage: " << argv[0] << " <data.bin> <topk>\n";
     return 1;
   }
   std::string file_path = argv[1];
   size_t topk = std::stoull(argv[2]);
+
   LOG_INFO("=== MiniVecDB Cold Start ===");
+  // 1) 载入向量数据。
   utils::Timer load_timer;
   storage::VectorStore store = storage::Serializer::load(file_path);
   LOG_INFO("Loaded " << store.size() << " vectors (Dim: " << store.dim() << ") in "
                      << load_timer.elapsed_ms() << " ms.");
+
+  // 2) 构建索引（当前是 FlatIndex 基线实现）。
   LOG_INFO("Building FlatIndex...");
   index::FlatIndex flat_index;
   flat_index.build(store);
+
+  // 3) 用第 0 条向量作为查询示例执行 topK。
   LOG_INFO("Searching Top " << topk << "...");
   utils::Timer search_timer;
   const float* query = store.get_vector(0);

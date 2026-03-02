@@ -91,4 +91,9 @@ MiniVecDB/
 └── docs/                 # 架构设计文档与 Benchmark 报告
 ```
 FlatIndex测试结果：
+
 ![alt text](image.png)
+
+GraphIndex测试结果（NSW架构）
+
+![alt text](image-1.png)

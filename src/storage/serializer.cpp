@@ -5,6 +5,7 @@
 
 namespace minivecdb {
 namespace storage {
+// 当前实现只支持 little-endian 平台，保证文件按既定字节序解释。
 inline bool is_little_endian() {
   uint32_t num = 1;
   return (*reinterpret_cast<uint8_t*>(&num) == 1);
@@ -25,7 +26,7 @@ void Serializer::save(const std::string& path, const VectorStore& store) {
   header.reserved1 = 0;
   header.reserved2 = 0;
 
-  // 逐个字节写入（而不用header），避免大小端序影响
+  // 按文件协议顺序逐字段写入 header，保持可读性与格式显式性。
   out.write(MAGIC_WORD, 4);
   uint32_t version = CURRENT_VERSION;
   out.write(reinterpret_cast<const char*>(&version), sizeof(version));
@@ -63,9 +64,7 @@ VectorStore Serializer::load(const std::string& path) {
   }
 
   FileHeader header;
-  // if (!in.read(reinterpret_cast<char*>(&header), sizeof(FileHeader))) {
-  //   throw std::runtime_error("File is too small or truncated: " + path);
-  // }
+  // 按 save() 对应顺序读取 header 各字段。
   in.read(header.magic, 4);
   if (std::memcmp(header.magic, MAGIC_WORD, 4) != 0) {
     throw std::runtime_error("Invalid magic word. Not an MVDB file.");
@@ -78,7 +77,7 @@ VectorStore Serializer::load(const std::string& path) {
   in.read(reinterpret_cast<char*>(&header.reserved1), sizeof(header.reserved1));
   in.read(reinterpret_cast<char*>(&header.count), sizeof(header.count));
   in.read(reinterpret_cast<char*>(&header.reserved2), sizeof(header.reserved2));
-  // 验证文件实际大小是否满足预期
+  // 预校验 payload 大小，提前识别截断文件。
   auto current_pos = in.tellg();
   in.seekg(0, std::ios::end);
   auto file_size = in.tellg();
@@ -89,6 +88,7 @@ VectorStore Serializer::load(const std::string& path) {
     throw std::runtime_error("File truncated: payload size smaller than header declaration.");
   }
 
+  // 临时缓冲整块读取，再逐条写回 VectorStore，复用其校验逻辑。
   VectorStore store(header.dim);
   store.reserve(header.count);
   std::vector<uint64_t> temp_ids(header.count);
