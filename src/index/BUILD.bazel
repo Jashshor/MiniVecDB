@@ -1,7 +1,7 @@
 cc_library(
     name = "iindex",
-    hdrs = ["iindex.h", "flat_index.h", "graph_index.h"],
-    srcs = ["flat_index.cpp", "graph_index.cpp"],
+    hdrs = ["iindex.h", "flat_index.h", "graph_index.h", "hnsw_index.h"],
+    srcs = ["flat_index.cpp", "graph_index.cpp", "hnsw_index.cpp"],
     deps = [
         "//src/storage:vector_store",
         "//src/metric:distance",
