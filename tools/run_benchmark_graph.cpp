@@ -30,9 +30,9 @@ int main(int argc, char** argv) {
   flat_index.build(store);
 
   // 3. 构建 GraphIndex (单层 NSW 测试对象)
-  std::cout << "[3/4] Building GraphIndex (M=16, ef_search=10)...\n";
+  std::cout << "[3/4] Building GraphIndex (M=16, ef_search=50)...\n";
   utils::Timer build_timer;
-  index::GraphIndex graph_index(16, 10);
+  index::GraphIndex graph_index(16, 50);
   graph_index.build(store);
   std::cout << "      Graph build time: " << build_timer.elapsed_ms() << " ms\n";
 

@@ -98,4 +98,6 @@ GraphIndex测试结果（NSW架构）
 
 ![alt text](image-1.png)
 
-ANN测试结果（HNSW架构）
+ANN测试结果（初级HNSW架构）
+
+![alt text](image-2.png)
