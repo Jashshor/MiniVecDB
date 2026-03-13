@@ -1,18 +1,29 @@
 {
-  "files.encoding": "utf8",
-  "files.autoGuessEncoding": false,
-  // 指定 C++ 文件使用官方的 cpptools 进行格式化
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": false,
+    // 指定 C++ 文件使用官方的 cpptools 进行格式化
     "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
         "editor.formatOnSave": true
     },
     "[c]": {
         "editor.defaultFormatter": "ms-vscode.cpptools",
         "editor.formatOnSave": true
     },
-    
     // 告诉 C/C++ 插件去读取我们刚才建的 .clang-format 文件
     "C_Cpp.formatting": "Default",
     "C_Cpp.clang_format_fallbackStyle": "none",
-    "C_Cpp.clang_format_style": "file"
+    "C_Cpp.clang_format_style": "file",
+    // 既然使用了 clangd，需要禁用 C/C++ 插件自身的补全和提示引擎，防止冲突
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.autocomplete": "disabled",
+    "C_Cpp.errorSquiggles": "disabled",
+    // 配置 clangd 插件
+    "clangd.path": "clangd",
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}",
+        "--background-index",
+        "--header-insertion=iwyu"
+    ],
+    "editor.tabCompletion": "on",
 }
