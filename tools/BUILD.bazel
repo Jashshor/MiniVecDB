@@ -26,3 +26,13 @@ cc_binary(
         "//src/utils:utils",
     ],
 )
+cc_binary(
+    name = "run_benchmark_hnsw",
+    srcs = ["run_benchmark_hnsw.cpp"],
+    deps = [
+        "//src/storage:serializer",
+        "//src/storage:vector_store",
+        "//src/index:iindex",
+        "//src/utils:utils",
+    ],
+)
